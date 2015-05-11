@@ -12,15 +12,23 @@ from bases import cities
 
 
 def save_data(filename, data):
-    with open(os.path.join("data", filename), 'wb') as fo:
+    filename = os.path.join("data", filename)
+    print "Saving %s..." % filename,
+    with open(filename, 'wb') as fo:
         cPickle.dump(data, fo)
+    print "Done"
 
 
 def load_data(filename):
-    if not os.path.exists(os.path.join("data", filename)):
+    filename = os.path.join("data", filename)
+    print "Reading %s..." % filename,
+    if not os.path.exists(filename):
+        print "Not found!"
         return None
-    with open(os.path.join("data", filename), 'rb') as fi:
-        return cPickle.load(fi)
+    with open(filename, 'rb') as fi:
+        ret = cPickle.load(fi)
+        print "Done!"
+        return ret
 
 
 def get_geo(city):
@@ -56,7 +64,6 @@ def get_geo(city):
 
 def init_geo_data(area):
     data_file = "geo_data_%s.dat" % area
-    print "Reading Data..."
     geo_data = load_data(data_file)
     if geo_data:
         return geo_data
@@ -121,6 +128,7 @@ def init_path_data(geo_data):
                 raise e
             print "%s" % path_data[i][j]
     save_data(data_file, path_data)
+    return path_data
 
 
 def main():
