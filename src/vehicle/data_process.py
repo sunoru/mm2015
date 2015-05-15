@@ -1,18 +1,17 @@
 # coding:utf-8
 import os
 import json
-import cPickle
-import sys
 import re
-import numpy as np
 
+import numpy as np
 import requests
 
-from bases import cities
+import cPickle
+from vehicle.bases import cities
 
 
 def save_data(filename, data):
-    filename = os.path.join("data", filename)
+    filename = os.path.join("..", "data", filename)
     print "Saving %s..." % filename,
     with open(filename, 'wb') as fo:
         cPickle.dump(data, fo)
@@ -20,7 +19,7 @@ def save_data(filename, data):
 
 
 def load_data(filename):
-    filename = os.path.join("data", filename)
+    filename = os.path.join("..", "data", filename)
     print "Reading %s..." % filename,
     if not os.path.exists(filename):
         print "Not found!"
