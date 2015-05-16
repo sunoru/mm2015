@@ -1,7 +1,9 @@
 # coding=utf-8
 import sys
-from main_algorithm import main
+
+from solution import main
 from vehicle import cities
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
