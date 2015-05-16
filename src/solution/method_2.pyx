@@ -435,4 +435,4 @@ def method_2(demand, path, city_list, area):
     for i in xrange(meta.start_number, meta.end_number):
         pop, stats, hof = do_process(i)
         with open(os.path.join(meta.log_dir, 'result.log'), 'a') as fo:
-            fo.write("%s\n" % hof[0].fitness.values[0])
+            fo.write("%s\n%s\n%s\n" % (meta.city_list[i], hof[0].data, hof[0].fitness.values[0]))
