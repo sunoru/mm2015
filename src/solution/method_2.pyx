@@ -1,5 +1,6 @@
 # coding=utf-8
 from __future__ import division
+import codecs
 import os
 from deap import creator, base, tools
 import random
@@ -55,9 +56,7 @@ cdef class Meta(object):
 cdef Meta meta = Meta()
 
 
-cdef class Vehicle(object):
-    cdef public cnp.ndarray data
-    cdef public list extra
+class Vehicle(object):
     def __init__(self, data, extra=None):
         if isinstance(data, np.ndarray):
             self.data = data
@@ -383,13 +382,13 @@ def do_process(int start):
     tmp = sys.stdout
     with open(os.path.join(meta.log_dir, "%s_%s_%s.log" % (cities[meta.area][0], start, meta.city_list[start])), 'w') as fo:
         sys.stdout = fo
-        algorithms.eaMuPlusLambda(
+        pop, logs, hdata = algorithms.eaMuPlusLambda(
             pop, meta.toolbox, meta.MU, meta.LAMBDA, meta.CXPB, meta.MUTPB, meta.NGEN, stats,
-            halloffame=hof, verbose=True
+            halloffame=hof, verbose=True,
         )
     sys.stdout = tmp
 
-    return pop, stats, hof
+    return pop, stats, hof, hdata
 
 
 def method_2(demand, path, city_list, area):
@@ -433,6 +432,6 @@ def method_2(demand, path, city_list, area):
     init_deap()
     cdef int i
     for i in xrange(meta.start_number, meta.end_number):
-        pop, stats, hof = do_process(i)
-        with open(os.path.join(meta.log_dir, 'result.log'), 'a') as fo:
-            fo.write("%s\n%s\n%s\n" % (meta.city_list[i], hof[0].data, hof[0].fitness.values[0]))
+        pop, stats, hof, hdata = do_process(i)
+        with codecs.open(os.path.join(meta.log_dir, 'result.log'), 'a', encoding='utf-8') as fo:
+            fo.write("%s\n%s\n%s\n" % (meta.city_list[i], hdata, hof[0].fitness.values[0]))

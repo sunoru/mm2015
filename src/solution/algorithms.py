@@ -59,7 +59,8 @@ def eaMuPlusLambda(population, toolbox, mu, lambda_, cxpb, mutpb, ngen,
     # tw = min(200, np.math.factorial(len(population[0].data)))
     # Begin the generational process
     for gen in range(1, ngen+1):
-        errlog("%s %s" % (gen, halloffame[0].fitness.values[0]))
+        if gen % 100 == 0:
+            errlog("%s %s" % (gen, halloffame[0].fitness.values[0]))
         # Vary the population
         offspring = varOr(population, toolbox, lambda_, cxpb, mutpb)
 
@@ -73,6 +74,7 @@ def eaMuPlusLambda(population, toolbox, mu, lambda_, cxpb, mutpb, ngen,
         # Update the hall of fame with the generated individuals
         if halloffame is not None:
             halloffame.update(offspring)
+            hdata = halloffame[0].data
 
         # Select the next generation population
         population[:] = toolbox.select(population + offspring, mu)
@@ -88,4 +90,4 @@ def eaMuPlusLambda(population, toolbox, mu, lambda_, cxpb, mutpb, ngen,
         #     if np.mean(z) <= halloffame[0].fitness.values[0] + 0.1 < oo:
         #         return population, logbook
 
-    return population, logbook
+    return population, logbook, hdata
