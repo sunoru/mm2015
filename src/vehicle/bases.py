@@ -1,4 +1,7 @@
-# coding:utf-8",
+# coding=utf-8
+import os
+
+
 cities_1 = [
     u"杭州",
     u"宁波",
@@ -90,4 +93,4 @@ cities = {
     'quanguo': [u"全国", cities_2]
 }
 
-
+data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")

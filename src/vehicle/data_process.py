@@ -1,4 +1,4 @@
-# coding:utf-8
+# coding=utf-8
 import os
 import json
 import re
@@ -7,11 +7,11 @@ import numpy as np
 import requests
 
 import cPickle
-from vehicle.bases import cities
+from vehicle.bases import cities, data_dir
 
 
 def save_data(filename, data):
-    filename = os.path.join("..", "data", filename)
+    filename = os.path.join(data_dir, filename)
     print "Saving %s..." % filename,
     with open(filename, 'wb') as fo:
         cPickle.dump(data, fo)
@@ -19,7 +19,7 @@ def save_data(filename, data):
 
 
 def load_data(filename):
-    filename = os.path.join("..", "data", filename)
+    filename = os.path.join(data_dir, filename)
     print "Reading %s..." % filename,
     if not os.path.exists(filename):
         print "Not found!"
@@ -102,6 +102,11 @@ def get_distance(x, y):
     q = requests.get(obj_url, params, headers=headers)
     distance = float(_length_regex.findall(q.text)[0]) / 1000
     return distance
+
+
+def load_path(area):
+    data_file = "distance_data_%s.dat" % area
+    return load_data(data_file)
 
 
 def init_path_data(geo_data):
