@@ -6,4 +6,4 @@ def main(area):
     demand = load_demand(area)
     path = load_path(area)
     city_list = cities[area][1]
-    method_2(demand, path, city_list, area)
+    method_2(demand, path, city_list, area, True)

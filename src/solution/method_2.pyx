@@ -391,7 +391,8 @@ def do_process(int start):
     return pop, stats, hof, hdata
 
 
-def method_2(demand, path, city_list, area):
+def method_2(demand, path, city_list, area, log=False):
+    cdef int i
     meta.demand = demand
     meta.path = path
     meta.city_list = city_list
@@ -429,9 +430,32 @@ def method_2(demand, path, city_list, area):
         except:
             continue
 
+    if log:
+        with codecs.open(os.path.join(meta.log_dir, cities[meta.area][0]+'_result.log'), 'r', encoding='utf-8') as fi:
+            logs = fi.read().split('\n')
+        fo = codecs.open(os.path.join(meta.log_dir, cities[meta.area][0]+'_result_h.log'), 'w', encoding='utf-8')
+        for i in xrange(meta.start_number, meta.end_number):
+            print i
+            init_process(i)
+            tcity, tpath, tdist = logs[i*3:i*3+3]
+            fo.write("%s\n" % tcity)
+            tpath = np.array(tpath[1:-1].split(), dtype=float)
+            split_list = [0]
+            for j in xrange(1, len(tpath)):
+                if meta.compare(tpath[j-1], tpath[j]):
+                    split_list.append(j)
+            split_list.append(len(tpath))
+            for j in xrange(1, len(split_list)):
+                plist = tpath[split_list[j-1]:split_list[j]]
+                cl = lambda x: meta.current_cities[x % meta.current_num]
+                plist = map(cl, plist)
+                fo.write("%s " % plist)
+            fo.write('\n')
+        fo.close()
+
+        return
     init_deap()
-    cdef int i
     for i in xrange(meta.start_number, meta.end_number):
         pop, stats, hof, hdata = do_process(i)
-        with codecs.open(os.path.join(meta.log_dir, 'result.log'), 'a', encoding='utf-8') as fo:
+        with codecs.open(os.path.join(meta.log_dir, cities[meta.area][0]+'result.log'), 'a', encoding='utf-8') as fo:
             fo.write("%s\n%s\n%s\n" % (meta.city_list[i], hdata, hof[0].fitness.values[0]))

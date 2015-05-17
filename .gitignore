@@ -2,6 +2,7 @@
 problem/
 docs/
 log/
+*.zip
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
